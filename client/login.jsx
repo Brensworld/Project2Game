@@ -25,6 +25,7 @@ const handleLogin=(e)=>{
     }
 
     helper.sendPost(e.target.action,{username,pass});
+    document.cookie=`username=${username}`;
     return false;
 }
 

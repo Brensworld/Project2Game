@@ -18,9 +18,23 @@ const handleChatMessage = (socket, msg) => {
 };
 
 const handleRoomChange = async (socket, roomName) => {
-  socket.rooms.forEach((room) => {
+  socket.rooms.forEach(async(room) => {
     if (room === socket.id) return;
     socket.leave(room);
+    try{
+        const oldRoom=await RoomModel.findOne({name:room}).exec();
+        let oldUsers=oldRoom.users;
+        oldUsers.pull('test');
+
+        await RoomModel.findOneAndUpdate(
+            {name: room},
+            {$set: {users: oldUsers}},
+            {new: true}
+        );
+    }catch(err){
+        console.log(err);
+    }
+
   });
   socket.join(roomName);
 
@@ -30,6 +44,15 @@ const handleRoomChange = async (socket, roomName) => {
       const newRoom = new Room({ name: roomName });
       await newRoom.save();
     }
+    
+    let tempUsers=currentRoom.users;
+    tempUsers.push('test');
+    
+    await RoomModel.findOneAndUpdate(
+        {name: roomName},
+        {$set: {users: tempUsers}},
+        { new: true }
+    );
   } catch (err) {
     console.log(err);
   }
