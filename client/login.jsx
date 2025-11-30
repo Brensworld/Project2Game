@@ -1,6 +1,16 @@
 const helper=require('./helper.js');
 const React=require('react');
 const {createRoot}=require('react-dom/client');
+import { Application, Assets, Container, Sprite } from 'pixi.js';
+
+
+// const createWindow=async()=>{
+//     const app= new Application();
+
+//     await app.init({width:600,height:400});
+
+//     document.body.appendChild(app.canvas);
+// }
 
 const handleLogin=(e)=>{
     e.preventDefault();
@@ -66,7 +76,6 @@ const handlePassChange=(e)=>{
     }
 
     helper.sendPost(e.target.action,{username,oldPass,newPass,newPass2});
-
     return false;
 }
 
@@ -160,6 +169,7 @@ const init=()=>{
     })
 
     root.render(<LoginWindow/>);
+    // createWindow();
 };
 
 window.onload=init;

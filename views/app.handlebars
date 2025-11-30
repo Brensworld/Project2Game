@@ -10,6 +10,18 @@
     <div class="navlink"><a href="/logout">Log out</a></div>
   </nav>
 
+  <form id="editForm">
+    <input id="editBox" type="text" />
+    <select name="channel" id="channelSelect">
+      <option value="general">General</option>
+      <option value="memes">Memes</option>
+    </select>
+    <input type="submit" />
+  </form>
+
+  <div id="messages"></div>
+
+
   <section id="app">
 
   </section>
@@ -18,6 +30,7 @@
     <img id="speech" src="/assets/img/speech.png" alt="speech box"/>
     <h3><span id="errorMessage"></span></h3>
   </div>
+  <script src="/socket.io/socket.io.js"></script>
   <script src="/assets/appBundle.js"></script>
 </body>
 </html>

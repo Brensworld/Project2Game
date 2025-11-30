@@ -1,5 +1,5 @@
 {
-  "name": "domomaker",
+  "name": "Project2",
   "version": "1.0.0",
   "description": "A Simple Login Example using Node.js, Mongo and Redis",
   "main": "./server/app.js",
@@ -30,8 +30,10 @@
     "express-session": "^1.18.2",
     "helmet": "^8.1.0",
     "mongoose": "^8.19.3",
+    "pixi.js": "^8.14.3",
     "redis": "^5.9.0",
     "serve-favicon": "^2.5.1",
+    "socket.io": "^4.8.1",
     "underscore": "^1.13.7"
   },
   "devDependencies": {

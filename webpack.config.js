@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+    devtool:"source-map",
     entry: {
         app:'./client/maker.jsx',
         login:'./client/login.jsx'
@@ -17,6 +18,7 @@ module.exports = {
         ]
     },
     mode: 'production',
+    
     watchOptions: {
         aggregateTimeout: 200,
     },
