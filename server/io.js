@@ -1,38 +1,58 @@
-//Taken from Austin Willoughby's in class demo on socket.io
+// Taken from Austin Willoughby's in class demo on socket.io
 
 const http = require('http');
 const { Server } = require('socket.io');
+const { models } = require('mongoose');
+const RoomModel = require('./models/Room');
+
+const { Room } = models;
 
 let io;
 
-
 const handleChatMessage = (socket, msg) => {
   socket.rooms.forEach((room) => {
-    
     if (room === socket.id) return;
 
     io.to(room).emit('chat message', msg);
   });
 };
 
-
-const handleRoomChange = (socket, roomName) => {
+const handleRoomChange = async (socket, roomName) => {
   socket.rooms.forEach((room) => {
     if (room === socket.id) return;
     socket.leave(room);
   });
   socket.join(roomName);
+
+  try {
+    const currentRoom = await RoomModel.findOne({ name: roomName }).exec();
+    if (!currentRoom) {
+      const newRoom = new Room({ name: roomName });
+      await newRoom.save();
+    }
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const socketSetup = (app) => {
   const server = http.createServer(app);
   io = new Server(server);
 
-  io.on('connection', (socket) => {
+  io.on('connection', async (socket) => {
     console.log('a user connected');
 
     /* Here we automatically put all new users into the general room. */
     socket.join('general');
+    try {
+      const currentRoom = await RoomModel.findOne({ name: 'general' }).exec();
+      if (!currentRoom) {
+        const newRoom = new Room({ name: 'general' });
+        await newRoom.save();
+      }
+    } catch (err) {
+      console.log(err);
+    }
 
     socket.on('disconnect', () => {
       console.log('a user disconnected');

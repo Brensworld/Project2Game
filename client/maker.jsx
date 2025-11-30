@@ -9,7 +9,6 @@ const socket = io();
 const handleEditBox = () => {
     const editForm = document.getElementById('editForm');
     const editBox = document.getElementById('editBox');
-    const channelSelect = document.getElementById('channelSelect');
 
     editForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -37,6 +36,7 @@ const displayMessage = (msg) => {
 const handleChannelSelect = () => {
     const channelSelect = document.getElementById('channelSelect');
     const messages = document.getElementById('messages');
+    const roomInfo=document.getElementById('roomInfo');
 
     /* In the basic demo, we used this change event listener to
        selectively listen to specific channels and not listen to
@@ -49,8 +49,10 @@ const handleChannelSelect = () => {
        will only recieve updates for the rooms that we are in.
     */
     channelSelect.addEventListener('change', () => {
+        const roomName=channelSelect.value;
         messages.innerHTML = '';
-        socket.emit('room change', channelSelect.value);
+        roomInfo.innerHTML=`You are in the ${roomName} room.`
+        socket.emit('room change', roomName);
     });
 }
 
@@ -66,6 +68,10 @@ const init=()=>{
     const root=createRoot(document.getElementById('app'));
 
     handleEditBox();
+
+    const roomInfo=document.getElementById('roomInfo');
+    const channelSelect=document.getElementById('channelSelect');
+    roomInfo.innerHTML=`You are in the ${channelSelect.value} room.`;
     
     socket.on('chat message', displayMessage);
     handleChannelSelect();

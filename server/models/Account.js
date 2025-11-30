@@ -33,6 +33,11 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  room: {
+    type: String,
+    required: true,
+    default: 'General',
+  },
   createdDate: {
     type: Date,
     default: Date.now,

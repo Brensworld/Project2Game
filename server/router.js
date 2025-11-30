@@ -13,6 +13,8 @@ const router = (app) => {
 
   app.get('/home', mid.requiresLogin, controllers.Account.homePage);
 
+  app.post('/updateRoom', mid.requiresLogin, controllers.Account.updateRoom);
+
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 
