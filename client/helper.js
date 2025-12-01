@@ -39,8 +39,47 @@ const hideError=()=>{
     document.getElementById('speechMessage').classList.add('hidden');
 }
 
+
+//taken from https://www.w3schools.com/js/js_cookies.asp
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+
+const removeUser=async()=>{
+  try{
+    const username=getCookie('username');
+      const room=document.getElementById(channelSelect).value;
+      const oldRoom=await RoomModel.findOne({name:room}).exec();
+      let oldUsers=oldRoom.users;
+      oldUsers.pull(username);
+
+      await RoomModel.findOneAndUpdate(
+        {name: room},
+        {$set: {users: oldUsers}},
+        {new: true}
+      );
+    }catch(err){
+        console.log(err);
+    }
+}
+
 module.exports={
     handleError,
     sendPost,
-    hideError
+    hideError,
+    getCookie,
+    removeUser
 }

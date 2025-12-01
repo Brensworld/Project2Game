@@ -17,14 +17,14 @@ const handleChatMessage = (socket, msg) => {
   });
 };
 
-const handleRoomChange = async (socket, roomName) => {
+const handleRoomChange = async (socket, roomName, username) => {
   socket.rooms.forEach(async(room) => {
     if (room === socket.id) return;
     socket.leave(room);
     try{
         const oldRoom=await RoomModel.findOne({name:room}).exec();
         let oldUsers=oldRoom.users;
-        oldUsers.pull('test');
+        oldUsers.pull(username);
 
         await RoomModel.findOneAndUpdate(
             {name: room},
@@ -46,7 +46,7 @@ const handleRoomChange = async (socket, roomName) => {
     }
     
     let tempUsers=currentRoom.users;
-    tempUsers.push('test');
+    tempUsers.push(username);
     
     await RoomModel.findOneAndUpdate(
         {name: roomName},
@@ -79,6 +79,8 @@ const socketSetup = (app) => {
 
     socket.on('disconnect', () => {
       console.log('a user disconnected');
+
+      
     });
 
     /* We need to pass down the current socket into each of these
@@ -88,7 +90,7 @@ const socketSetup = (app) => {
            it down into our handler functions in this way.
         */
     socket.on('chat message', (msg) => handleChatMessage(socket, msg));
-    socket.on('room change', (room) => handleRoomChange(socket, room));
+    socket.on('room change', (room,username) => handleRoomChange(socket, room,username));
   });
 
   return server;

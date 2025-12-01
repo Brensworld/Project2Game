@@ -12,6 +12,8 @@ import { Application, Assets, Container, Sprite } from 'pixi.js';
 //     document.body.appendChild(app.canvas);
 // }
 
+const socket=io();
+
 const handleLogin=(e)=>{
     e.preventDefault();
     helper.hideError();
@@ -144,6 +146,8 @@ const PassChangeWindow=(props)=>{
 
 
 const init=()=>{
+
+    console.log(helper.getCookie('username'));
     const loginButton=document.getElementById('loginButton');
     const signupButton=document.getElementById('signupButton');
     const passChangeButton=document.getElementById('passChangeButton');
@@ -169,7 +173,9 @@ const init=()=>{
         return false;
     })
 
+    
     root.render(<LoginWindow/>);
+
     // createWindow();
 };
 

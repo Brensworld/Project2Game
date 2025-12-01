@@ -2,9 +2,13 @@ const helper = require('./helper.js');
 const React=require('react');
 const { useState, useEffect }=React;
 const { createRoot }=require('react-dom/client');
+const RoomModel = require('../server/models/Room.js');
 
 
 const socket = io();
+
+
+
 
 const handleEditBox = () => {
     const editForm = document.getElementById('editForm');
@@ -33,6 +37,16 @@ const displayMessage = (msg) => {
     document.getElementById('messages').appendChild(messageDiv);
 }
 
+const displayUsers=()=>{
+    const channelSelect = document.getElementById('channelSelect');
+    const roomName=channelSelect.value;
+    const users=RoomModel.findOne({name:roomName}).users;
+    
+    console.log(users);
+
+
+}
+
 const handleChannelSelect = () => {
     const channelSelect = document.getElementById('channelSelect');
     const messages = document.getElementById('messages');
@@ -52,7 +66,9 @@ const handleChannelSelect = () => {
         const roomName=channelSelect.value;
         messages.innerHTML = '';
         roomInfo.innerHTML=`You are in the ${roomName} room.`
-        socket.emit('room change', roomName);
+        const username=helper.getCookie('username');
+        socket.emit('room change', roomName, username);
+        // displayUsers();
     });
 }
 
@@ -76,7 +92,11 @@ const init=()=>{
     socket.on('chat message', displayMessage);
     handleChannelSelect();
 
+    const username=helper.getCookie('username');
+    socket.emit('room change', 'general', username);
+
     root.render(<App />);
 };
 
 window.onload=init;
+
