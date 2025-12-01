@@ -96,26 +96,6 @@ const passChange = async (req, res) => {
   });
 };
 
-const updateRoom = async (req, res) => {
-  const username = `${req.body.username}`;
-  const roomName = `${req.body.room}`;
-
-  if (!username || !roomName) {
-    return res.status(400).json({ error: 'Username or room is missing' });
-  }
-
-  try {
-    await AccountModel.findOneAndUpdate(
-      { username },
-      { $set: { room: roomName } },
-      { new: true },
-    );
-    return res.status(200);
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ error: 'an error occured' });
-  }
-};
 
 const changeAlien=async (req,res)=>{
   const username=`${req.body.username}`;
@@ -144,7 +124,6 @@ module.exports = {
   logout,
   signup,
   passChange,
-  updateRoom,
   changeAlienPage,
   changeAlien
 };
