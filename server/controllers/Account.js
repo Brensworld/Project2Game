@@ -5,6 +5,7 @@ const { Account } = models;
 
 const loginPage = (req, res) => res.render('login');
 const homePage = (req, res) => res.render('app');
+const changeAlienPage=(req,res)=>res.render('changeAlien');
 
 const logout = (req, res) => {
   req.session.destroy();
@@ -116,6 +117,26 @@ const updateRoom = async (req, res) => {
   }
 };
 
+const changeAlien=async (req,res)=>{
+  const username=`${req.body.username}`;
+  const alien=`${req.body.alien}`;
+
+  if(!alien || !username){
+    return res.staus(400).json({error:'Username or alien is missing'});
+  }
+
+  try{
+    await AccountModel.findOneAndUpdate(
+      {username},
+      {$set:{alien}},
+      {new:true}
+    );
+    return res.status(200);
+  }catch(err){
+    return res.status(500).json({error:'an error occured'});
+  }
+}
+
 module.exports = {
   loginPage,
   homePage,
@@ -124,4 +145,6 @@ module.exports = {
   signup,
   passChange,
   updateRoom,
+  changeAlienPage,
+  changeAlien
 };

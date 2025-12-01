@@ -15,6 +15,9 @@ const router = (app) => {
 
   app.post('/updateRoom', mid.requiresLogin, controllers.Account.updateRoom);
 
+  app.get('/changeAlien',mid.requiresLogin,controllers.Account.changeAlienPage)
+  app.post('/changeAlien',mid.requiresLogin,controllers.Account.changeAlien)
+
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 

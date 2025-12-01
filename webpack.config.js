@@ -4,7 +4,8 @@ module.exports = {
     devtool:"source-map",
     entry: {
         app:'./client/maker.jsx',
-        login:'./client/login.jsx'
+        login:'./client/login.jsx',
+        changeAlien:'./client/changeAlien.jsx'
     },
     module:{
         rules:[
