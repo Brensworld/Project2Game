@@ -21,6 +21,8 @@
   "author": "Cody Van De Mark / Austin Willoughby",
   "license": "Apache 2.0",
   "dependencies": {
+    "@pixi/react": "^8.0.5",
+    "@pixi/unsafe-eval": "^7.4.3",
     "bcrypt": "^6.0.0",
     "compression": "^1.8.1",
     "connect-redis": "^9.0.0",
