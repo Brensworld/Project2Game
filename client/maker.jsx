@@ -4,13 +4,17 @@ const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
 const RoomModel = require('../server/models/Room.js');
 
-const { Application, extend } = require('@pixi/react')
+
+const { Application, extend, useTick } = require('@pixi/react')
+
 
 // import '@pixi/unsafe-eval';
 const {
     Container,
     Graphics,
     Sprite,
+    Assets,
+    Texture
 } = require('pixi.js');
 
 extend({
@@ -19,8 +23,108 @@ extend({
     Sprite,
 });
 
+const keyboard = Object.freeze({
+    SPACE: 32,
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    DOWN: 40,
+    // W: 87,
+    // A: 65,
+    // S:83,
+    // D:68,
+});
+
+const keys = {
+    32: false,
+    36: false,
+    38: false,
+    39: false,
+    40: false,
+}
+
+// let alienX = 100;
+// let alienY = 100;
+let alienSpeed = 10;
 
 const socket = io();
+
+const AlienSprite = () => {
+    const spriteRef = React.useRef(null)
+
+    const [texture, setTexture] = React.useState(Texture.EMPTY)
+    const [alienPos, setPosition] = React.useState({ x: 100, y: 100 })
+
+    // Preload the sprite if it hasn't been loaded yet
+    useEffect(() => {
+        if (texture === Texture.EMPTY) {
+            Assets
+                .load('/assets/img/ailyun.png')
+                .then((result) => {
+                    setTexture(result)
+                });
+        }
+    }, [texture]);
+
+    //loop for alien
+    useTick(() => {
+
+        setPosition((prev) => {
+            const { x, y } = prev
+
+            let dx = 0;
+            let dy = 0;
+
+            // console.log("Alien tick");
+            if (keys[keyboard.RIGHT]) {
+
+                dx += alienSpeed;
+
+            }
+            if (keys[keyboard.LEFT]) {
+
+                dx -= alienSpeed
+            }
+
+            if (keys[keyboard.DOWN]) {
+
+                dy += alienSpeed
+            }
+            if (keys[keyboard.UP]) {
+
+                dy -= alienSpeed
+            }
+
+            if (y+dy < 0) {
+                dy += 400;
+            }
+            if (y+dy > 400) {
+                dy -= 400;
+            }
+
+            if (x+dx < 0) {
+                dx += 600;
+            }
+            if (x+dx > 600) {
+                dx -= 600;
+            }
+
+            return { x: x + dx, y: y + dy }
+        })
+
+    });
+
+    return (
+        <pixiSprite
+            ref={spriteRef}
+            anchor={0.5}
+            eventMode={'static'}
+            scale={0.125}
+            texture={texture}
+            x={alienPos.x}
+            y={alienPos.y} />
+    );
+}
 
 
 
@@ -91,15 +195,8 @@ const App = () => {
 
     return (
         <div>
-            <Application width={200} height={200} backgroundColor={0x1099bb} autoStart>
-                <pixiGraphics
-                    x={0}
-                    y={0}
-                    draw={(graphics) => {
-                        graphics.setFillStyle({ color: 'red' });
-                        graphics.rect(0, 0, 25, 25);
-                    }}
-                />
+            <Application width={600} height={400} backgroundColor={0x1099bb} autoStart id="pixiApp">
+                <AlienSprite />
             </Application>
         </div>
     );
@@ -124,4 +221,16 @@ const init = () => {
 };
 
 window.onload = init;
+
+window.onkeyup = (e) => {
+    // console.log("keyup=" + e.keyCode);
+    keys[e.keyCode] = false;
+    e.preventDefault();
+};
+
+window.onkeydown = (e) => {
+    // console.log("keydown=" + e.keyCode);
+    keys[e.keyCode] = true;
+
+};
 

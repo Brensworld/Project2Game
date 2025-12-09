@@ -18,23 +18,22 @@ const handleChatMessage = (socket, msg) => {
 };
 
 const handleRoomChange = async (socket, roomName, username) => {
-  socket.rooms.forEach(async(room) => {
+  socket.rooms.forEach(async (room) => {
     if (room === socket.id) return;
     socket.leave(room);
-    try{
-        const oldRoom=await RoomModel.findOne({name:room}).exec();
-        let oldUsers=oldRoom.users;
-        oldUsers.pull(username);
+    try {
+      const oldRoom = await RoomModel.findOne({ name: room }).exec();
+      const oldUsers = oldRoom.users;
+      oldUsers.pull(username);
 
-        await RoomModel.findOneAndUpdate(
-            {name: room},
-            {$set: {users: oldUsers}},
-            {new: true}
-        );
-    }catch(err){
-        console.log(err);
+      await RoomModel.findOneAndUpdate(
+        { name: room },
+        { $set: { users: oldUsers } },
+        { new: true },
+      );
+    } catch (err) {
+      console.log(err);
     }
-
   });
   socket.join(roomName);
 
@@ -44,14 +43,14 @@ const handleRoomChange = async (socket, roomName, username) => {
       const newRoom = new Room({ name: roomName });
       await newRoom.save();
     }
-    
-    let tempUsers=currentRoom.users;
+
+    const tempUsers = currentRoom.users;
     tempUsers.push(username);
-    
+
     await RoomModel.findOneAndUpdate(
-        {name: roomName},
-        {$set: {users: tempUsers}},
-        { new: true }
+      { name: roomName },
+      { $set: { users: tempUsers } },
+      { new: true },
     );
   } catch (err) {
     console.log(err);
@@ -79,8 +78,6 @@ const socketSetup = (app) => {
 
     socket.on('disconnect', () => {
       console.log('a user disconnected');
-
-      
     });
 
     /* We need to pass down the current socket into each of these
@@ -90,7 +87,7 @@ const socketSetup = (app) => {
            it down into our handler functions in this way.
         */
     socket.on('chat message', (msg) => handleChatMessage(socket, msg));
-    socket.on('room change', (room,username) => handleRoomChange(socket, room,username));
+    socket.on('room change', (room, username) => handleRoomChange(socket, room, username));
   });
 
   return server;

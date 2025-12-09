@@ -13,8 +13,8 @@ const router = (app) => {
 
   app.get('/home', mid.requiresLogin, controllers.Account.homePage);
 
-  app.get('/changeAlien',mid.requiresLogin,controllers.Account.changeAlienPage)
-  app.post('/changeAlien',mid.requiresLogin,controllers.Account.changeAlien)
+  app.get('/changeAlien', mid.requiresLogin, controllers.Account.changeAlienPage);
+  app.post('/changeAlien', mid.requiresLogin, controllers.Account.changeAlien);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };

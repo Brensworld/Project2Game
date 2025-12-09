@@ -38,10 +38,10 @@ const AccountSchema = new mongoose.Schema({
     required: true,
     default: 'General',
   },
-  alien:{
-    type:String,
-    required:true,
-    default:'/assets/img/ailyun.png',
+  alien: {
+    type: String,
+    required: true,
+    default: '/assets/img/ailyun.png',
   },
   createdDate: {
     type: Date,

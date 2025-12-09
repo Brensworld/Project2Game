@@ -137,3 +137,9 @@ nav:nth-child(1) {
     color: red;
     font-style: italic;
 }
+
+#pixiApp{
+    width:100%;
+    min-height: 400;
+    align-content: center;
+}
