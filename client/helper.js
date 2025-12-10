@@ -80,10 +80,13 @@ const removeUser=async()=>{
     }
 }
 
+
+
+
 module.exports={
     handleError,
     sendPost,
     hideError,
     getCookie,
-    removeUser
+    removeUser,
 }

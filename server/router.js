@@ -20,6 +20,8 @@ const router = (app) => {
 
   app.get('/getPaid', mid.requiresLogin, controllers.Account.getPaid);
 
+  app.get('/getUsers', mid.requiresLogin, controllers.Room.getUsers);
+
   app.post('/setPaid', mid.requiresLogin, controllers.Account.setPaid);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);

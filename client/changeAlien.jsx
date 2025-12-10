@@ -19,7 +19,7 @@ const AlienForm = (props) => {
     const [greenChoice, setGreen] = React.useState(props.greenChoice);
     const [blueChoice, setBlue] = React.useState(props.blueChoice);
     const [purpleChoice, setPurple] = React.useState(props.purpleChoice);
-    const [paid,setPaid]=React.useState(false);
+    const [paid, setPaid] = React.useState(false);
 
     React.useEffect(() => {
         const loadAlienURL = async () => {
@@ -37,7 +37,7 @@ const AlienForm = (props) => {
         };
         loadAlienURL();
 
-    }, []);
+    }, [props.reloadPaymentButton]);
 
     //messy choice tree, but unfortunatley i don't know how to make
     //one variable for an element to return and add to that
@@ -172,18 +172,25 @@ const PaymentForm = (props) => {
     }, [props.reloadPaymentButton]);
 
 
-
-    if (paid) {
-        return (
-            <button type="button" onClick={(e) => handlePayment(e, props.triggerReload)}
-                value={'/setPaid'}>Unpurchase Cosmetics</button>
-        )
-    } else {
-        return (
-            <button type="button" value={'/setPaid'}
-                onClick={(e) => handlePayment(e, props.triggerReload)}>Purchase Cosmetics</button>
-        )
+    const PaymentButton = () => {
+        if (paid) {
+            return (
+                <button type="button" onClick={(e) => handlePayment(e, props.triggerReload)}
+                    value={'/setPaid'}>Unpurchase Cosmetics</button>
+            )
+        } else {
+            return (
+                <button type="button" value={'/setPaid'}
+                    onClick={(e) => handlePayment(e, props.triggerReload)}>Purchase Cosmetics</button>
+            )
+        }
     }
+
+    return(
+        <div>
+            <PaymentButton/>
+        </div>
+    )
 
 }
 
@@ -194,7 +201,7 @@ const App = () => {
 
     return (
         <div>
-            <AlienForm greenChoice={false} blueChoice={false} purpleChoice={false} />
+            <AlienForm greenChoice={false} blueChoice={false} purpleChoice={false} reloadPaymentButton={reloadPaymentButton} />
             <PaymentForm paid={false} reloadPaymentButton={reloadPaymentButton} triggerReload={() => setPaymentButton(!reloadPaymentButton)} />
         </div>
     )

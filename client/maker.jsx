@@ -50,7 +50,7 @@ const socket = io();
 
 const AlienSprite = (props) => {
     const [alienURL, setAlien] = useState(props.alienURL);
-    
+
     const spriteRef = React.useRef(null)
 
     const [texture, setTexture] = React.useState(Texture.EMPTY)
@@ -63,20 +63,20 @@ const AlienSprite = (props) => {
             setAlien(data.alien);
         };
         loadAlienURL();
-        
+
     }, []);
 
     props.triggerReload();
-    
 
-    
+
+
 
 
 
 
     // Preload the sprite if it hasn't been loaded yet
     useEffect(() => {
-        if (texture === Texture.EMPTY && alienURL && alienURL!=="") {
+        if (texture === Texture.EMPTY && alienURL && alienURL !== "") {
             console.log(alienURL);
             Assets
                 .load(alienURL)
@@ -84,7 +84,7 @@ const AlienSprite = (props) => {
                     setTexture(result)
                 });
         }
-    }, [texture,props.reloadAlien]);
+    }, [texture, props.reloadAlien]);
 
     //loop for alien
     //help obtained from example: https://www.youtube.com/watch?v=zwKt-H09cU4
@@ -177,15 +177,44 @@ const displayMessage = (msg) => {
     document.getElementById('messages').appendChild(messageDiv);
 }
 
-// const displayUsers = () => {
-//     const channelSelect = document.getElementById('channelSelect');
-//     const roomName = channelSelect.value;
-//     const users = RoomModel.findOne({ name: roomName }).users;
+// const UserList = (props) => {
+//     const [users, setUsers] = React.useState(props.users);
 
-//     console.log(users);
+//     React.useEffect(() => {
+//         const getUsers = async () => {
+//             const response = await fetch("/getUsers");
+//             const data = await response.json();
+//             // console.log(data.users);
+//             setUsers(data.users);
+//         }
+//         getUsers();
+//     },[props.reloadUsers]);
+
+//     if(users && users.length===0){
+//         return(
+//             <div className='userList'>
+//                 <p className='emptyUsers'>No Users in room!</p>
+//             </div>
+//         );
+//     }
+
+//     const UserNodes=users.map(user=>{
+//         return(
+//             <div> {user}</div>
+//         )
+//     });
+
+//     return(
+//         <div>
+//             You are in a room with <UserNodes/>
+//         </div>
+//     )
 
 
 // }
+
+
+
 
 const handleChannelSelect = () => {
     const channelSelect = document.getElementById('channelSelect');
@@ -208,17 +237,18 @@ const handleChannelSelect = () => {
         roomInfo.innerHTML = `You are in the ${roomName} room.`
         const username = helper.getCookie('username');
         socket.emit('room change', roomName, username);
-        // displayUsers();
     });
 }
 
 const App = () => {
     const [reloadAlien, setReloadAlien] = useState(false);
+    const [reloadUsers,setReloadUsers]=useState(false);
 
     return (
         <div>
+            {/* <UserList reloadUsers={reloadUsers} triggerReload={()=>setReloadUsers(!reloadUsers)}/> */}
             <Application width={600} height={400} backgroundColor={0x1099bb} autoStart id="pixiApp">
-                <AlienSprite alienURL="" reloadAlien={reloadAlien}  triggerReload={()=>setReloadAlien(!reloadAlien)} />
+                <AlienSprite alienURL="" reloadAlien={reloadAlien} triggerReload={() => setReloadAlien(!reloadAlien)} />
             </Application>
         </div>
     );

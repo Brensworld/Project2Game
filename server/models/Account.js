@@ -33,11 +33,6 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  room: {
-    type: String,
-    required: true,
-    default: 'General',
-  },
   alien: {
     type: String,
     required: true,
@@ -47,6 +42,11 @@ const AccountSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
     default: false,
+  },
+  room: {
+    type: String,
+    required: true,
+    default: 'general',
   },
   createdDate: {
     type: Date,
