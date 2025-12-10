@@ -177,15 +177,15 @@ const displayMessage = (msg) => {
     document.getElementById('messages').appendChild(messageDiv);
 }
 
-const displayUsers = () => {
-    const channelSelect = document.getElementById('channelSelect');
-    const roomName = channelSelect.value;
-    const users = RoomModel.findOne({ name: roomName }).users;
+// const displayUsers = () => {
+//     const channelSelect = document.getElementById('channelSelect');
+//     const roomName = channelSelect.value;
+//     const users = RoomModel.findOne({ name: roomName }).users;
 
-    console.log(users);
+//     console.log(users);
 
 
-}
+// }
 
 const handleChannelSelect = () => {
     const channelSelect = document.getElementById('channelSelect');

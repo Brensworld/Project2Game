@@ -18,6 +18,10 @@ const router = (app) => {
 
   app.get('/getAlien', mid.requiresLogin, controllers.Account.getAlien);
 
+  app.get('/getPaid', mid.requiresLogin, controllers.Account.getPaid);
+
+  app.post('/setPaid', mid.requiresLogin, controllers.Account.setPaid);
+
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 

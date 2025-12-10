@@ -128,6 +128,34 @@ const getAlien = async (req, res) => {
   }
 };
 
+const getPaid = async (req, res) => {
+  try {
+    const query = { _id: req.session.account._id };
+    const user = await AccountModel.findOne(query);
+    const { paid } = user;
+
+    return res.status(200).json({ paid });
+  } catch (err) {
+    return res.status(500).json({ error: 'an error occurred' });
+  }
+};
+
+const setPaid = async (req, res) => {
+  const username = `${req.body.username}`;
+  const { paid } = req.body;
+
+  try {
+    await AccountModel.findOneAndUpdate(
+      { username },
+      { $set: { paid: !paid } },
+      { new: true },
+    );
+    return res.status(200);
+  } catch (err) {
+    return res.status(500).json({ error: 'an error occurred' });
+  }
+};
+
 module.exports = {
   loginPage,
   homePage,
@@ -138,4 +166,6 @@ module.exports = {
   changeAlienPage,
   changeAlien,
   getAlien,
+  getPaid,
+  setPaid,
 };

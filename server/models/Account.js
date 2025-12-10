@@ -43,6 +43,11 @@ const AccountSchema = new mongoose.Schema({
     required: true,
     default: '/assets/img/ailyun.png',
   },
+  paid: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   createdDate: {
     type: Date,
     default: Date.now,
