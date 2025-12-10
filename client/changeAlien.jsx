@@ -15,9 +15,28 @@ const handleAlienChange=(e)=>{
 
 
 const AlienForm=(props)=>{
-    return(
+
+    const [greenChoice, setGreen]=React.useState(props.greenChoice);
+    const [blueChoice, setBlue]=React.useState(props.blueChoice);
+
+    React.useEffect(() => {
+        const loadAlienURL = async () => {
+            const response = await fetch('/getAlien');
+            const data = await response.json();
+            const alienURL=data.alien;
+            
+            setGreen(!(alienURL.includes("bloo")));
+            setBlue(alienURL.includes("bloo"));
+        };
+        loadAlienURL();
+        
+    }, []);
+
+
+    if(greenChoice){
+        return(
         <form action="/changeAlien" method="POST" id='alienForm' onSubmit={handleAlienChange}>
-        <input type="radio" id='greenAlien' name="alienSelect" value="/assets/img/ailyun.png"/>
+        <input type="radio" id='greenAlien' name="alienSelect" value="/assets/img/ailyun.png" defaultChecked/>
         <label for="greenAlien">Green</label>
         <img id="greenAlienImg" src="/assets/img/ailyun.png" alt="green alien" widht="128" height="128"/>
 
@@ -28,13 +47,29 @@ const AlienForm=(props)=>{
         <input type="submit" value="Submit"/>
     </form>
     )
+    }else if(blueChoice){
+        return(
+        <form action="/changeAlien" method="POST" id='alienForm' onSubmit={handleAlienChange}>
+        <input type="radio" id='greenAlien' name="alienSelect" value="/assets/img/ailyun.png"/>
+        <label for="greenAlien">Green</label>
+        <img id="greenAlienImg" src="/assets/img/ailyun.png" alt="green alien" widht="128" height="128"/>
+
+        <input type="radio" id='blueAlien' name="alienSelect" value="/assets/img/blooailyun.png" defaultChecked/>
+        <label for="blueAlien">Blue</label>
+        <img id="blueAlienImg" src="/assets/img/blooailyun.png" alt="blue alien" widht="128" height="128"/>
+
+        <input type="submit" value="Submit"/>
+    </form>
+    )
+    }
+    
 }
 
 
 const init=()=>{
     const root=createRoot(document.getElementById('content'));
 
-    root.render(<AlienForm/>)
+    root.render(<AlienForm greenChoice={false} blueChoice={false}/>)
 }
 
 window.onload=init;

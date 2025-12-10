@@ -63,11 +63,11 @@ const AlienSprite = (props) => {
             setAlien(data.alien);
         };
         loadAlienURL();
-        console.log(`trigger ${alienURL}`);
         
     }, []);
 
     props.triggerReload();
+    
 
     
 
