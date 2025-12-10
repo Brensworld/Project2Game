@@ -116,6 +116,18 @@ const changeAlien = async (req, res) => {
   }
 };
 
+const getAlien = async (req, res) => {
+  try {
+    const query = { _id: req.session.account._id };
+    const user = await AccountModel.findOne(query);
+    const { alien } = user;
+
+    return res.status(200).json({ alien });
+  } catch (err) {
+    return res.status(500).json({ error: 'an error occurred' });
+  }
+};
+
 module.exports = {
   loginPage,
   homePage,
@@ -125,4 +137,5 @@ module.exports = {
   passChange,
   changeAlienPage,
   changeAlien,
+  getAlien,
 };

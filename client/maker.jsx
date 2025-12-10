@@ -4,7 +4,6 @@ const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
 const RoomModel = require('../server/models/Room.js');
 
-
 const { Application, extend, useTick } = require('@pixi/react')
 
 
@@ -49,24 +48,46 @@ let alienSpeed = 10;
 
 const socket = io();
 
-const AlienSprite = () => {
+const AlienSprite = (props) => {
+    const [alienURL, setAlien] = useState(props.alienURL);
+    
     const spriteRef = React.useRef(null)
 
     const [texture, setTexture] = React.useState(Texture.EMPTY)
     const [alienPos, setPosition] = React.useState({ x: 100, y: 100 })
 
+    useEffect(() => {
+        const loadAlienURL = async () => {
+            const response = await fetch('/getAlien');
+            const data = await response.json();
+            setAlien(data.alien);
+        };
+        loadAlienURL();
+        console.log(`trigger ${alienURL}`);
+        
+    }, []);
+
+    props.triggerReload();
+
+    
+
+
+
+
     // Preload the sprite if it hasn't been loaded yet
     useEffect(() => {
-        if (texture === Texture.EMPTY) {
+        if (texture === Texture.EMPTY && alienURL && alienURL!=="") {
+            console.log(alienURL);
             Assets
-                .load('/assets/img/ailyun.png')
+                .load(alienURL)
                 .then((result) => {
                     setTexture(result)
                 });
         }
-    }, [texture]);
+    }, [texture,props.reloadAlien]);
 
     //loop for alien
+    //help obtained from example: https://www.youtube.com/watch?v=zwKt-H09cU4
     useTick(() => {
 
         setPosition((prev) => {
@@ -95,17 +116,17 @@ const AlienSprite = () => {
                 dy -= alienSpeed
             }
 
-            if (y+dy < 0) {
+            if (y + dy < 0) {
                 dy += 400;
             }
-            if (y+dy > 400) {
+            if (y + dy > 400) {
                 dy -= 400;
             }
 
-            if (x+dx < 0) {
+            if (x + dx < 0) {
                 dx += 600;
             }
-            if (x+dx > 600) {
+            if (x + dx > 600) {
                 dx -= 600;
             }
 
@@ -192,11 +213,12 @@ const handleChannelSelect = () => {
 }
 
 const App = () => {
+    const [reloadAlien, setReloadAlien] = useState(false);
 
     return (
         <div>
             <Application width={600} height={400} backgroundColor={0x1099bb} autoStart id="pixiApp">
-                <AlienSprite />
+                <AlienSprite alienURL="" reloadAlien={reloadAlien}  triggerReload={()=>setReloadAlien(!reloadAlien)} />
             </Application>
         </div>
     );

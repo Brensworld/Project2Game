@@ -16,6 +16,8 @@ const router = (app) => {
   app.get('/changeAlien', mid.requiresLogin, controllers.Account.changeAlienPage);
   app.post('/changeAlien', mid.requiresLogin, controllers.Account.changeAlien);
 
+  app.get('/getAlien', mid.requiresLogin, controllers.Account.getAlien);
+
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 
